@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Post a Job | HustleX</title>
+<style>
+body { font-family: Arial; background: #f5f7fa; margin: 0; padding: 0; }
+header { background: #00BCD4; color: white; padding: 15px; text-align: center; }
+form { max-width: 600px; margin: 30px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+fieldset { display: none; border: none; }
+fieldset.active { display: block; }
+input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
+button { background: #00BCD4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+button:hover { background: #0097A7; }
+img.preview { max-width: 100px; margin-top: 10px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<header>🚀 HustleX – Post a Job</header>
+
+<form id="jobForm" action="success.html" method="POST" enctype="multipart/form-data">
+  <fieldset class="active">
+    <label>Job Title</label>
+    <input type="text" name="job_title" required>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Job Type</label>
+    <input type="text" name="job_type" placeholder="Full-time / Part-time / Freelance" required>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Work Location</label>
+    <input type="text" name="work_location" required>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Salary</label>
+    <input type="text" name="salary">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Deadline</label>
+    <input type="date" name="deadline">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Description</label>
+    <textarea name="description" rows="4"></textarea>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Client Type</label>
+    <input type="text" name="client_type">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Company Name</label>
+    <input type="text" name="company_name">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Verified?</label>
+    <select name="verified">
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Previous Jobs</label>
+    <input type="text" name="previous_jobs" placeholder="None">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Upload CV (PDF/DOCX)</label>
+    <input type="file" name="cv_file" accept=".pdf,.docx">
+    <span id="cvPreview"></span>
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Upload Profile Image (PNG/JPG)</label>
+    <input type="file" name="profile_image" accept=".png,.jpg,.jpeg" onchange="showImagePreview(this)">
+    <img id="imagePreview" class="preview" src="#" alt="Image Preview" style="display:none;">
+    <button type="button" onclick="nextStep(this)">Next →</button>
+  </fieldset>
+
+  <fieldset>
+    <label>Job Link</label>
+    <input type="url" name="job_link" required>
+    <button type="submit">✅ Post Job</button>
+  </fieldset>
+</form>
+
+<script>
+function nextStep(button){
+  const current = button.parentElement;
+  current.classList.remove('active');
+  const next = current.nextElementSibling;
+  if(next) next.classList.add('active');
+}
+
+function showImagePreview(input) {
+  const preview = document.getElementById('imagePreview');
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+
+</body>
+</html>
