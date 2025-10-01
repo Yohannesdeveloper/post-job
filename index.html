@@ -3,123 +3,181 @@
 <head>
 <meta charset="UTF-8">
 <title>Post a Job | HustleX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial; background: #f5f7fa; margin: 0; padding: 0; }
-header { background: #00BCD4; color: white; padding: 15px; text-align: center; }
-form { max-width: 600px; margin: 30px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-fieldset { display: none; border: none; }
-fieldset.active { display: block; }
-input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
-button { background: #00BCD4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-button:hover { background: #0097A7; }
-img.preview { max-width: 100px; margin-top: 10px; border-radius: 6px; }
+/* Layout */
+body { margin: 0; padding: 0; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 40%, #22c55e 100%); font-family: Arial; color: #0f172a; }
+header { padding: 28px 16px; text-align: center; color: white; position: sticky; top: 0; backdrop-filter: blur(6px); background: rgba(14,165,233,0.35); border-bottom: 1px solid rgba(255,255,255,0.2); }
+.brand { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; }
+.sub { opacity: 0.9; font-size: 13px; margin-top: 4px; }
+.container { max-width: 960px; margin: 24px auto 48px; padding: 0 16px; }
+
+/* Card */
+.card { background: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(2, 6, 23, 0.25); overflow: hidden; border: 1px solid #e2e8f0; }
+.card-header { padding: 24px; background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); border-bottom: 1px solid #eef2f7; }
+.card-title { margin: 0; font-size: 20px; font-weight: 800; color: #0f172a; }
+.card-subtitle { margin: 6px 0 0; font-size: 13px; color: #475569; }
+.card-body { padding: 24px; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 720px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+/* Field */
+.field { display: flex; flex-direction: column; }
+.label { font-size: 12px; font-weight: 700; color: #0f172a; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 8px; }
+.input, .textarea, .select { width: 100%; box-sizing: border-box; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; font-size: 14px; color: #0f172a; outline: none; transition: box-shadow .2s, border-color .2s, transform .06s; }
+.textarea { min-height: 120px; resize: vertical; }
+.input:focus, .textarea:focus, .select:focus { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14,165,233,.15); }
+.hint { font-size: 12px; color: #64748b; margin-top: 6px; }
+.inline { display: flex; align-items: center; gap: 10px; }
+.chip { display: inline-block; background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+
+/* File inputs */
+.file { position: relative; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 16px; background: #f8fafc; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+.file:hover { border-color: #0ea5e9; background: #f0f9ff; }
+.file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.file .name { margin-top: 8px; font-size: 13px; color: #334155; }
+.preview { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; border: 1px solid #e2e8f0; }
+
+/* Actions */
+.actions { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-top: 1px solid #eef2f7; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); }
+.btn { appearance: none; border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 800; letter-spacing: .2px; cursor: pointer; transition: transform .06s ease, box-shadow .2s ease; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: linear-gradient(135deg, #0ea5e9, #22c55e); color: white; box-shadow: 0 10px 24px rgba(34,197,94,0.35); }
+.btn-primary:hover { box-shadow: 0 14px 28px rgba(34,197,94,0.45); }
+.btn-ghost { background: transparent; color: #0f172a; }
+.disclaimer { font-size: 12px; color: #64748b; }
+
+/* OMG banner */
+.omg { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: linear-gradient(90deg, #ecfeff, #f0fdfa); border: 1px solid #e2e8f0; border-radius: 12px; font-weight: 700; color: #0f172a; }
+.omg .emoji { font-size: 18px; }
 </style>
 </head>
 <body>
-<header>🚀 HustleX – Post a Job</header>
+<header>
+<div class="brand">🚀 HustleX</div>
+<div class="sub">Post a Job – single page, fast and beautiful</div>
+</header>
 
-<form id="jobForm" action="success.html" method="POST" enctype="multipart/form-data">
-  <fieldset class="active">
-    <label>Job Title</label>
-    <input type="text" name="job_title" required>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
+<div class="container">
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Create a stunning job post</h2>
+    <p class="card-subtitle">Everything you need on one page. No steps. No fuss.</p>
+  </div>
+  <form id="jobForm" action="/post-job" method="POST" enctype="multipart/form-data">
+    <div class="card-body">
+      <div class="omg"><span class="emoji">✨</span><span>Make them say OMG with a clear, complete post.</span></div>
+      <div class="grid grid-2" style="margin-top:16px;">
+        <div class="field">
+          <label class="label">Job Title</label>
+          <input class="input" type="text" name="job_title" placeholder="Senior React Developer" required>
+        </div>
+        <div class="field">
+          <label class="label">Job Type</label>
+          <input class="input" type="text" name="job_type" placeholder="Full-time / Part-time / Freelance" required>
+        </div>
+        <div class="field">
+          <label class="label">Work Location</label>
+          <input class="input" type="text" name="work_location" placeholder="Remote / Addis Ababa / Hybrid" required>
+        </div>
+        <div class="field">
+          <label class="label">Salary</label>
+          <input class="input" type="text" name="salary" placeholder="Negotiable / ETB 30k–45k / $60k–$90k">
+          <div class="hint">Optional. Use a range for better conversion.</div>
+        </div>
+        <div class="field">
+          <label class="label">Deadline</label>
+          <input class="input" type="date" name="deadline">
+        </div>
+        <div class="field">
+          <label class="label">Client Type</label>
+          <input class="input" type="text" name="client_type" placeholder="Individual / Startup / Enterprise">
+        </div>
+        <div class="field">
+          <label class="label">Company Name</label>
+          <input class="input" type="text" name="company_name" placeholder="HustleX Technologies">
+        </div>
+        <div class="field">
+          <label class="label">Verified</label>
+          <select class="select" name="verified">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+      </div>
 
-  <fieldset>
-    <label>Job Type</label>
-    <input type="text" name="job_type" placeholder="Full-time / Part-time / Freelance" required>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
+      <div class="field">
+        <label class="label">Role Description</label>
+        <textarea class="textarea" name="description" placeholder="Tell candidates what makes this role exciting and impactful..." rows="6"></textarea>
+        <div class="hint">Tip: Focus on outcomes, tools, and growth opportunities.</div>
+      </div>
 
-  <fieldset>
-    <label>Work Location</label>
-    <input type="text" name="work_location" required>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
+      <div class="grid grid-2">
+        <div class="field">
+          <label class="label">Previous Jobs</label>
+          <input class="input" type="text" name="previous_jobs" placeholder="None">
+        </div>
+        <div class="field">
+          <label class="label">Job Link</label>
+          <input class="input" type="url" name="job_link" placeholder="https://example.com/job/123" required>
+        </div>
+      </div>
 
-  <fieldset>
-    <label>Salary</label>
-    <input type="text" name="salary">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
+      <div class="grid grid-2">
+        <div class="field">
+          <label class="label">Upload CV (PDF/DOCX)</label>
+          <label class="file">
+            <input type="file" name="cv_file" accept=".pdf,.docx" onchange="showCvName(this)">
+            <div>Click to upload or drag & drop</div>
+            <div class="name" id="cvName">No file selected</div>
+          </label>
+          <div class="hint">Optional. Max 16MB.</div>
+        </div>
+        <div class="field">
+          <label class="label">Profile Image (PNG/JPG)</label>
+          <label class="file">
+            <input type="file" name="profile_image" accept=".png,.jpg,.jpeg" onchange="showImagePreview(this)">
+            <div>Click to upload or drag & drop</div>
+            <div class="name" id="imgName">No image selected</div>
+          </label>
+          <div class="preview" id="imgPreview" style="display:none;">
+            <img id="imagePreview" src="#" alt="Preview">
+            <span class="hint">Looks great!</span>
+          </div>
+        </div>
+      </div>
 
-  <fieldset>
-    <label>Deadline</label>
-    <input type="date" name="deadline">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Description</label>
-    <textarea name="description" rows="4"></textarea>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Client Type</label>
-    <input type="text" name="client_type">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Company Name</label>
-    <input type="text" name="company_name">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Verified?</label>
-    <select name="verified">
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Previous Jobs</label>
-    <input type="text" name="previous_jobs" placeholder="None">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Upload CV (PDF/DOCX)</label>
-    <input type="file" name="cv_file" accept=".pdf,.docx">
-    <span id="cvPreview"></span>
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Upload Profile Image (PNG/JPG)</label>
-    <input type="file" name="profile_image" accept=".png,.jpg,.jpeg" onchange="showImagePreview(this)">
-    <img id="imagePreview" class="preview" src="#" alt="Image Preview" style="display:none;">
-    <button type="button" onclick="nextStep(this)">Next →</button>
-  </fieldset>
-
-  <fieldset>
-    <label>Job Link</label>
-    <input type="url" name="job_link" required>
-    <button type="submit">✅ Post Job</button>
-  </fieldset>
-</form>
+    </div>
+    <div class="actions">
+      <div class="disclaimer">By posting, you agree to our terms and content policy.</div>
+      <button type="submit" class="btn btn-primary">✅ Post Job</button>
+    </div>
+  </form>
+</div>
+</div>
 
 <script>
-function nextStep(button){
-  const current = button.parentElement;
-  current.classList.remove('active');
-  const next = current.nextElementSibling;
-  if(next) next.classList.add('active');
+function showCvName(input){
+  var name = document.getElementById('cvName');
+  if(input.files && input.files[0]){ name.textContent = input.files[0].name; }
+  else { name.textContent = 'No file selected'; }
 }
-
-function showImagePreview(input) {
-  const preview = document.getElementById('imagePreview');
-  if(input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-    }
+function showImagePreview(input){
+  var imgName = document.getElementById('imgName');
+  var wrapper = document.getElementById('imgPreview');
+  var img = document.getElementById('imagePreview');
+  if(input.files && input.files[0]){
+    imgName.textContent = input.files[0].name;
+    var reader = new FileReader();
+    reader.onload = function(e){ img.src = e.target.result; wrapper.style.display = 'flex'; };
     reader.readAsDataURL(input.files[0]);
+  } else {
+    imgName.textContent = 'No image selected';
+    wrapper.style.display = 'none';
   }
 }
 </script>
